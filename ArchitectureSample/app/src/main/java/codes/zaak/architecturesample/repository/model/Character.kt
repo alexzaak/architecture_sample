@@ -1,3 +1,13 @@
 package codes.zaak.architecturesample.repository.model
 
-data class Character(val id: Int, val name: String, val image: String, val power: String, val race: String, val saga: String)
+import com.squareup.moshi.Json
+
+data class Character(
+    val id: Int,
+    @Json(name = "nm_character")
+    val name: String,
+    @Json(name = "img_character")
+    val image: String,
+    @Json(name = "fighting_power")
+    val power: String,
+    val race: String, val saga: String)

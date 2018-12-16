@@ -1,3 +1,13 @@
 package codes.zaak.architecturesample.repository.model
 
-data class Saga(val id: Int, val name: String, val characters: List<Character>, val description: String, val image: String)
+import com.squareup.moshi.Json
+
+data class Saga(
+    val id: Int,
+    @Json(name = "nm_saga")
+    val name: String,
+    val characters: List<Character>,
+    @Json(name = "ds_saga")
+    val description: String,
+    @Json(name = "img_saga")
+    val image: String)
