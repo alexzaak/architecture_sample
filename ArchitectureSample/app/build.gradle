@@ -41,6 +41,9 @@ dependencies {
     implementation "com.google.code.gson:gson:$retrofitVersion"
     testImplementation "com.squareup.okhttp3:mockwebserver:$okhttpVersion"
 
+    // mapping
+    implementation "com.squareup.moshi:moshi-kotlin:$moshiVersion"
+
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
