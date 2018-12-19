@@ -49,6 +49,9 @@ dependencies {
     // mapping
     implementation "com.squareup.moshi:moshi-kotlin:$moshiVersion"
 
+    // picasso
+    implementation 'com.squareup.picasso:picasso:2.71828'
+
     // architecture components
     implementation "androidx.lifecycle:lifecycle-extensions:$archCompomentVersion"
     kapt "androidx.lifecycle:lifecycle-compiler:$archCompomentVersion"
