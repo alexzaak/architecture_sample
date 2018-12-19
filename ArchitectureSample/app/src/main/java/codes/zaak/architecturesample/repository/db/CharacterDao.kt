@@ -1,6 +1,5 @@
 package codes.zaak.architecturesample.repository.db
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
 import codes.zaak.architecturesample.repository.model.entity.CharacterEntity
 import io.reactivex.Flowable

@@ -12,11 +12,11 @@ import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-class MainViewModel @Inject constructor(val characterRepository: CharacterRepository): ViewModel() {
+class MainViewModel @Inject constructor(val characterRepository: CharacterRepository) : ViewModel() {
 
     init {
         Timber.d("MainViewModel injected")
-        }
+    }
 
     var characterResult: MutableLiveData<List<Character>> = MutableLiveData()
     var characterError: MutableLiveData<String> = MutableLiveData()
@@ -59,7 +59,7 @@ class MainViewModel @Inject constructor(val characterRepository: CharacterReposi
             .subscribe(disposableObserver)
     }
 
-    fun disposeElements(){
-        if(null != disposableObserver && !disposableObserver.isDisposed) disposableObserver.dispose()
+    fun disposeElements() {
+        if (null != disposableObserver && !disposableObserver.isDisposed) disposableObserver.dispose()
     }
 }

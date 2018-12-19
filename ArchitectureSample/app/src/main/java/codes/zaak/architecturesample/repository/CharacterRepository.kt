@@ -23,8 +23,12 @@ class CharacterRepository @Inject constructor(val service: CharacterService, val
     private fun getRemoteData(): Flowable<List<Character>> {
         return this.service.getAllCharacters().doOnNext {
             Timber.d("Fetched Characters ${it.size}")
-            this.dao.insertCharacter(it.map { character -> CharacterEntity(character.id,
-                character.name,character.image,character.power,character.race,character.saga) })
+            this.dao.insertCharacter(it.map { character ->
+                CharacterEntity(
+                    character.id,
+                    character.name, character.image, character.power, character.race, character.saga
+                )
+            })
         }
     }
 

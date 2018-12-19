@@ -10,4 +10,5 @@ data class Saga(
     @Json(name = "ds_saga")
     val description: String,
     @Json(name = "img_saga")
-    val image: String)
+    val image: String
+)

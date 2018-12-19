@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "character")
-data class CharacterEntity (
+data class CharacterEntity(
     @PrimaryKey
     @ColumnInfo(name = "id")
     val id: Int,
@@ -18,4 +18,5 @@ data class CharacterEntity (
     @ColumnInfo(name = "race")
     val race: String,
     @ColumnInfo(name = "saga")
-    val saga: String)
+    val saga: String
+)
