@@ -12,8 +12,8 @@ data class SagaEntity(
     val id: Int,
     @ColumnInfo(name = "name")
     val name: String,
-    @ColumnInfo(name = "characters")
-    val characters: List<Character>,
+    //@ColumnInfo(name = "characters")
+    //val characters: List<Character>,
     @ColumnInfo(name = "description")
     val description: String,
     @ColumnInfo(name = "image")

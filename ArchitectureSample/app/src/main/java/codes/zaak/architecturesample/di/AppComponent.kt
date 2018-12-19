@@ -1,6 +1,7 @@
 package codes.zaak.architecturesample.di
 
 import android.app.Application
+import codes.zaak.architecturesample.viewmodel.MainViewModel
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjectionModule
@@ -12,7 +13,10 @@ import javax.inject.Singleton
 @Singleton
 @Component(modules = [
     AndroidInjectionModule::class,
-    ApiModule::class
+    ActivityModule::class,
+    DatabaseModule::class,
+    ApiModule::class,
+    ViewModelModule::class
 ])
 interface AppComponent: AndroidInjector<DaggerApplication> {
     @Component.Builder
