@@ -1,4 +1,4 @@
-package codes.zaak.architecturesample.repository.model
+package codes.zaak.architecturesample.repository.model.response
 
 import com.squareup.moshi.Json
 

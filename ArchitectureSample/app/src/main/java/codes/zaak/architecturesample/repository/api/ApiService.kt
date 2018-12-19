@@ -1,8 +1,8 @@
 package codes.zaak.architecturesample.repository.api
 
 import androidx.lifecycle.LiveData
-import codes.zaak.architecturesample.repository.model.Character
-import codes.zaak.architecturesample.repository.model.Saga
+import codes.zaak.architecturesample.repository.model.response.Character
+import codes.zaak.architecturesample.repository.model.response.Saga
 import retrofit2.http.GET
 import retrofit2.http.Path
 

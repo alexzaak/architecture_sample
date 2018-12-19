@@ -1,4 +1,4 @@
-package codes.zaak.architecturesample.repository.model
+package codes.zaak.architecturesample.repository.model.response
 
 import com.squareup.moshi.Json
 
@@ -10,4 +10,5 @@ data class Character(
     val image: String,
     @Json(name = "fighting_power")
     val power: String,
-    val race: String, val saga: String)
+    val race: String,
+    val saga: String)
