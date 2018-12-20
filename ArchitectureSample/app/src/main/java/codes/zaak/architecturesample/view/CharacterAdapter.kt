@@ -29,7 +29,7 @@ class CharacterAdapter(characterList: List<Character>?) : RecyclerView.Adapter<C
 
     override fun onBindViewHolder(holder: CharacterViewHolder, position: Int) {
         val characterItem = characterList[position]
-        holder?.characterListItem(characterItem)
+        holder.characterListItem(characterItem)
     }
 
     override fun getItemCount(): Int {

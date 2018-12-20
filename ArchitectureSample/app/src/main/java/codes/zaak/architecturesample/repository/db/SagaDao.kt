@@ -2,6 +2,8 @@ package codes.zaak.architecturesample.repository.db
 
 import androidx.room.*
 import codes.zaak.architecturesample.repository.model.entity.SagaEntity
+import io.reactivex.Flowable
+import io.reactivex.Single
 
 @Dao
 interface SagaDao {
@@ -12,8 +14,8 @@ interface SagaDao {
     fun updateSaga(saga: SagaEntity)
 
     @Query("SELECT * FROM SAGA WHERE id = :id_")
-    fun getSaga(id_: Int): SagaEntity
+    fun getSaga(id_: Int): Single<SagaEntity>
 
     @Query("SELECT * FROM SAGA")
-    fun getSagaList(): SagaEntity
+    fun getSagaList(): Flowable<List<SagaEntity>>
 }

@@ -11,6 +11,9 @@ interface CharacterService {
     @GET("/characters")
     fun getAllCharacters(): Flowable<List<Character>>
 
+    @GET("/characters/saga/{saga_id}")
+    fun getCharacters(@Path("saga_id") id: Int): Flowable<List<Character>>
+
     @GET("/characters/{char_id}")
     fun getCharacter(@Path("char_id") id: Int): Single<Character>
 }

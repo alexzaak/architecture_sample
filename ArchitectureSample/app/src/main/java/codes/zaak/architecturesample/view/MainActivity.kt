@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import codes.zaak.architecturesample.R
 import codes.zaak.architecturesample.viewmodel.AppViewModelFactory
-import codes.zaak.architecturesample.viewmodel.MainViewModel
+import codes.zaak.architecturesample.viewmodel.SagaViewModel
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_main.*
 import timber.log.Timber
@@ -20,11 +20,11 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
 
     @Inject
     lateinit var viewModelFactory: AppViewModelFactory
-    private lateinit var viewModel: MainViewModel
+    private lateinit var viewModel: SagaViewModel
 
-    var characterAdapter = CharacterAdapter(ArrayList())
+    var adapter = SagaAdapter(ArrayList())
 
-    lateinit var mLifecycleRegistry: LifecycleRegistry
+    private lateinit var mLifecycleRegistry: LifecycleRegistry
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
@@ -34,30 +34,30 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
         mLifecycleRegistry = LifecycleRegistry(this)
         mLifecycleRegistry.markState(Lifecycle.State.CREATED)
 
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(MainViewModel::class.java)
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(SagaViewModel::class.java)
 
-        viewModel.loadCharacters()
+        viewModel.loadSagaList()
 
-        viewModel.characterResult().observe(this, Observer {
+        viewModel.result().observe(this, Observer {
             Timber.d(it.toString())
             it.let { result ->
-                characterAdapter.addCharacterList(result)
-                recycler.adapter = characterAdapter
+                adapter.addSagaList(result)
+                recycler.adapter = adapter
             }
         })
 
-        viewModel.characterError().observe(this, Observer {
+        viewModel.error().observe(this, Observer {
             Toast.makeText(this, it, Toast.LENGTH_LONG).show()
         })
 
-        viewModel.characterLoader().observe(this, Observer {
+        viewModel.loader().observe(this, Observer {
             it.let { isLoading ->
                 refresh.isRefreshing = isLoading
                 Toast.makeText(this, isLoading.toString(), Toast.LENGTH_LONG).show()
             }
         })
 
-        val gridLayoutManager = GridLayoutManager(this, 2)
+        val gridLayoutManager = GridLayoutManager(this, 1)
         gridLayoutManager.orientation = RecyclerView.VERTICAL
         recycler.apply {
             setHasFixedSize(true)
@@ -65,7 +65,7 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
             itemAnimator = DefaultItemAnimator()
         }
 
-        refresh.setOnRefreshListener { this.viewModel.loadCharacters() }
+        refresh.setOnRefreshListener { this.viewModel.loadSagaList() }
     }
 
     public override fun onStart() {

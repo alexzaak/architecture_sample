@@ -10,4 +10,5 @@
     <dimen name="image_overflow_width">20dp</dimen>
     <dimen name="image_overflow_height">30dp</dimen>
     <dimen name="image_overflow_margin_top">10dp</dimen>
+    <dimen name="saga_image_height">200dp</dimen>
 </resources>
