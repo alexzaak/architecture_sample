@@ -1,4 +1,4 @@
-package codes.zaak.architecturesample.view
+package codes.zaak.architecturesample.view.saga
 
 import android.view.Gravity
 import android.view.LayoutInflater

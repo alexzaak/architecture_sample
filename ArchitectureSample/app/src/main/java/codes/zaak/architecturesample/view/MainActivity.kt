@@ -1,28 +1,24 @@
 package codes.zaak.architecturesample.view
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.*
-import androidx.recyclerview.widget.DefaultItemAnimator
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LifecycleRegistry
 import codes.zaak.architecturesample.R
-import codes.zaak.architecturesample.viewmodel.AppViewModelFactory
-import codes.zaak.architecturesample.viewmodel.SagaViewModel
+import codes.zaak.architecturesample.view.saga.SagaFragment
 import dagger.android.AndroidInjection
-import kotlinx.android.synthetic.main.activity_main.*
-import timber.log.Timber
+import dagger.android.AndroidInjector
+import dagger.android.DispatchingAndroidInjector
+import dagger.android.support.HasSupportFragmentInjector
 import javax.inject.Inject
 
 
-class MainActivity : AppCompatActivity(), LifecycleOwner {
+class MainActivity : AppCompatActivity(), LifecycleOwner, HasSupportFragmentInjector {
 
     @Inject
-    lateinit var viewModelFactory: AppViewModelFactory
-    private lateinit var viewModel: SagaViewModel
-
-    var adapter = SagaAdapter(ArrayList())
+    lateinit var fragmentInjector: DispatchingAndroidInjector<Fragment>
 
     private lateinit var mLifecycleRegistry: LifecycleRegistry
 
@@ -34,39 +30,18 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
         mLifecycleRegistry = LifecycleRegistry(this)
         mLifecycleRegistry.markState(Lifecycle.State.CREATED)
 
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(SagaViewModel::class.java)
 
-        viewModel.loadSagaList()
-
-        viewModel.result().observe(this, Observer {
-            Timber.d(it.toString())
-            it.let { result ->
-                adapter.addSagaList(result)
-                recycler.adapter = adapter
-            }
-        })
-
-        viewModel.error().observe(this, Observer {
-            Toast.makeText(this, it, Toast.LENGTH_LONG).show()
-        })
-
-        viewModel.loader().observe(this, Observer {
-            it.let { isLoading ->
-                refresh.isRefreshing = isLoading
-                Toast.makeText(this, isLoading.toString(), Toast.LENGTH_LONG).show()
-            }
-        })
-
-        val gridLayoutManager = GridLayoutManager(this, 1)
-        gridLayoutManager.orientation = RecyclerView.VERTICAL
-        recycler.apply {
-            setHasFixedSize(true)
-            layoutManager = gridLayoutManager
-            itemAnimator = DefaultItemAnimator()
+        if (savedInstanceState == null) {
+            val sagaFragment = SagaFragment()
+            supportFragmentManager.beginTransaction().replace(R.id.container, sagaFragment)
+                .addToBackStack(null).commit()
         }
-
-        refresh.setOnRefreshListener { this.viewModel.loadSagaList() }
     }
+
+    override fun supportFragmentInjector(): AndroidInjector<Fragment> {
+        return fragmentInjector
+    }
+
 
     public override fun onStart() {
         super.onStart()
@@ -77,8 +52,11 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
         return mLifecycleRegistry
     }
 
-    override fun onDestroy() {
-        viewModel.disposeElements()
-        super.onDestroy()
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val count = supportFragmentManager.backStackEntryCount
+        if (count == 0) {
+            finish()
+        }
     }
 }
