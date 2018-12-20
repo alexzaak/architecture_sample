@@ -41,8 +41,8 @@ class MainViewModel @Inject constructor(val characterRepository: CharacterReposi
 
             }
 
-            override fun onNext(cryptocurrencies: List<Character>) {
-                characterResult.postValue(cryptocurrencies)
+            override fun onNext(chracterList: List<Character>) {
+                characterResult.postValue(chracterList)
                 characterLoader.postValue(false)
             }
 

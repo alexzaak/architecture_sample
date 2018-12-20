@@ -1,4 +1,4 @@
-package codes.zaak.architecturesample
+package codes.zaak.architecturesample.view
 
 import android.os.Bundle
 import android.widget.Toast
@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.*
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import codes.zaak.architecturesample.view.CharacterAdapter
+import codes.zaak.architecturesample.R
 import codes.zaak.architecturesample.viewmodel.AppViewModelFactory
 import codes.zaak.architecturesample.viewmodel.MainViewModel
 import dagger.android.AndroidInjection
@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
 
         viewModel.loadCharacters()
 
-        viewModel.characterResult.observe(this, Observer {
+        viewModel.characterResult().observe(this, Observer {
             Timber.d(it.toString())
             if (it != null) {
                 characterAdapter.addCharacterList(it)
@@ -45,11 +45,11 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
             }
         })
 
-        viewModel.characterError.observe(this, Observer {
+        viewModel.characterError().observe(this, Observer {
             Toast.makeText(this, it, Toast.LENGTH_LONG).show()
         })
 
-        viewModel.characterLoader.observe(this, Observer {
+        viewModel.characterLoader().observe(this, Observer {
             Toast.makeText(this, it.toString(), Toast.LENGTH_LONG).show()
         })
 
