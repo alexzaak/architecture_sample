@@ -20,7 +20,7 @@ class CharacterAdapter(characterList: List<Character>?) : RecyclerView.Adapter<C
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharacterViewHolder {
         val itemView = LayoutInflater.from(parent?.context).inflate(
-            R.layout.character_list_item,
+            R.layout.character_card,
             parent, false
         )
         return CharacterViewHolder(itemView)
@@ -45,12 +45,19 @@ class CharacterAdapter(characterList: List<Character>?) : RecyclerView.Adapter<C
 
         var characterName = itemView.findViewById<TextView>(R.id.name)
         var characterImage = itemView.findViewById<ImageView>(R.id.image)
+        var characterPowerLevel = itemView.findViewById<TextView>(R.id.power_level)
 
         fun characterListItem(characterItem: Character) {
             characterName.text = characterItem.name
+            characterPowerLevel.text = characterItem.power
 
             if (characterItem.image.isNotBlank()) {
-                Picasso.get().load(characterItem.image).into(characterImage)
+                Picasso
+                    .get()
+                    .load(characterItem.image)
+                    .fit()
+                    .centerCrop()
+                    .into(characterImage)
             }
         }
     }

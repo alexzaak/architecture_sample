@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.*
+import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import codes.zaak.architecturesample.R
@@ -53,11 +54,12 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
             Toast.makeText(this, it.toString(), Toast.LENGTH_LONG).show()
         })
 
-        val gridLayoutManager = GridLayoutManager(this, 1)
+        val gridLayoutManager = GridLayoutManager(this, 2)
         gridLayoutManager.orientation = RecyclerView.VERTICAL
         recycler.apply {
             setHasFixedSize(true)
             layoutManager = gridLayoutManager
+            itemAnimator = DefaultItemAnimator()
         }
     }
 
