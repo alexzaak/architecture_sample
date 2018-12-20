@@ -85,5 +85,11 @@ class SagaFragment : Fragment() {
         }
 
         refresh.setOnRefreshListener { this.viewModel.loadSagaList() }
+
+        this.adapter.itemSelected().subscribe { it -> this.makeToast(it.name) }
+    }
+
+    private fun makeToast(message: String) {
+        Toast.makeText(this.context, message, Toast.LENGTH_LONG).show()
     }
 }

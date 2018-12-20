@@ -10,9 +10,13 @@ import androidx.recyclerview.widget.RecyclerView
 import codes.zaak.architecturesample.R
 import codes.zaak.architecturesample.repository.model.response.Saga
 import com.squareup.picasso.Picasso
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.subjects.PublishSubject
 
 class SagaAdapter(sagaList: List<Saga>) : RecyclerView.Adapter<SagaAdapter.SagaViewHolder>() {
 
+    private val subject: PublishSubject<Saga> = PublishSubject.create()
     private var sagaList = ArrayList<Saga>()
 
     init {
@@ -30,10 +34,15 @@ class SagaAdapter(sagaList: List<Saga>) : RecyclerView.Adapter<SagaAdapter.SagaV
     override fun onBindViewHolder(holder: SagaViewHolder, position: Int) {
         val item = sagaList[position]
         holder.sagaListItem(item)
+        holder.itemView.setOnClickListener { this.subject.onNext(item) }
     }
 
     override fun getItemCount(): Int {
         return sagaList.size
+    }
+
+    fun itemSelected(): Observable<Saga> {
+        return this.subject.observeOn(AndroidSchedulers.mainThread())
     }
 
     fun addSagaList(sagaList: List<Saga>) {
