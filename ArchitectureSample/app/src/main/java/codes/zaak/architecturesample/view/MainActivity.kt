@@ -27,8 +27,8 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
     lateinit var mLifecycleRegistry: LifecycleRegistry
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
         AndroidInjection.inject(this)
+        super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         mLifecycleRegistry = LifecycleRegistry(this)
@@ -40,8 +40,8 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
 
         viewModel.characterResult().observe(this, Observer {
             Timber.d(it.toString())
-            if (it != null) {
-                characterAdapter.addCharacterList(it)
+            it.let { result ->
+                characterAdapter.addCharacterList(result)
                 recycler.adapter = characterAdapter
             }
         })
@@ -51,7 +51,10 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
         })
 
         viewModel.characterLoader().observe(this, Observer {
-            Toast.makeText(this, it.toString(), Toast.LENGTH_LONG).show()
+            it.let { isLoading ->
+                refresh.isRefreshing = isLoading
+                Toast.makeText(this, isLoading.toString(), Toast.LENGTH_LONG).show()
+            }
         })
 
         val gridLayoutManager = GridLayoutManager(this, 2)
@@ -61,6 +64,8 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
             layoutManager = gridLayoutManager
             itemAnimator = DefaultItemAnimator()
         }
+
+        refresh.setOnRefreshListener { this.viewModel.loadCharacters() }
     }
 
     public override fun onStart() {
