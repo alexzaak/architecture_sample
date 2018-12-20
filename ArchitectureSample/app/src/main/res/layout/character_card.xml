@@ -49,6 +49,7 @@
                     android:paddingTop="@dimen/character_name_padding"
                     android:textColor="@color/character_name"
                     android:textSize="@dimen/character_name"
+                    android:fontFamily="sans-serif-smallcaps"
                     card_view:layout_constraintTop_toBottomOf="@id/image"
                     card_view:layout_constraintStart_toStartOf="parent"
                     card_view:layout_constraintEnd_toEndOf="parent"/>
@@ -61,7 +62,9 @@
                     android:paddingBottom="@dimen/power_level_padding_bottom"
                     android:paddingLeft="@dimen/character_name_padding"
                     android:paddingRight="@dimen/character_name_padding"
-                    android:textSize="@dimen/power_level" card_view:layout_constraintTop_toBottomOf="@+id/name"/>
+                    android:textSize="@dimen/power_level"
+                    android:fontFamily="sans-serif-condensed"
+                    card_view:layout_constraintTop_toBottomOf="@+id/name"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

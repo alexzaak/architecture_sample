@@ -4,8 +4,8 @@
     <dimen name="character_card_radius">0dp</dimen>
     <dimen name="character_image_height">160dp</dimen>
     <dimen name="character_name_padding">10dp</dimen>
-    <dimen name="character_name">15sp</dimen>
-    <dimen name="power_level">12sp</dimen>
+    <dimen name="character_name">20sp</dimen>
+    <dimen name="power_level">15sp</dimen>
     <dimen name="power_level_padding_bottom">5dp</dimen>
     <dimen name="image_overflow_width">20dp</dimen>
     <dimen name="image_overflow_height">30dp</dimen>

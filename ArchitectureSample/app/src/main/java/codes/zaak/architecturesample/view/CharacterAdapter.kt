@@ -1,5 +1,6 @@
 package codes.zaak.architecturesample.view
 
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -56,7 +57,7 @@ class CharacterAdapter(characterList: List<Character>?) : RecyclerView.Adapter<C
                     .get()
                     .load(characterItem.image)
                     .fit()
-                    .centerCrop()
+                    .centerCrop(Gravity.TOP)
                     .into(characterImage)
             }
         }
