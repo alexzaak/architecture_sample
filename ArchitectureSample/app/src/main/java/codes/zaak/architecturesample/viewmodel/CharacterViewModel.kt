@@ -12,10 +12,10 @@ import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-class MainViewModel @Inject constructor(private val characterRepository: CharacterRepository) : ViewModel() {
+class CharacterViewModel @Inject constructor(private val characterRepository: CharacterRepository) : ViewModel() {
 
     init {
-        Timber.d("MainViewModel injected")
+        Timber.d("CharacterViewModel injected")
     }
 
     private var characterResult: MediatorLiveData<List<Character>> = MediatorLiveData()
@@ -23,19 +23,51 @@ class MainViewModel @Inject constructor(private val characterRepository: Charact
     private var characterLoader: MediatorLiveData<Boolean> = MediatorLiveData()
     lateinit var disposableObserver: DisposableObserver<List<Character>>
 
-    fun characterResult(): LiveData<List<Character>> {
+    fun result(): LiveData<List<Character>> {
         return this.characterResult
     }
 
-    fun characterError(): LiveData<String> {
+    fun error(): LiveData<String> {
         return this.characterError
     }
 
-    fun characterLoader(): LiveData<Boolean> {
+    fun loader(): LiveData<Boolean> {
         return this.characterLoader
     }
 
     fun loadCharacters() {
+        this.disposableObserver = object : DisposableObserver<List<Character>>() {
+            override fun onComplete() {
+                characterLoader.postValue(false)
+            }
+
+            override fun onStart() {
+                characterLoader.postValue(true)
+            }
+
+            override fun onNext(chracterList: List<Character>) {
+                characterResult.postValue(chracterList)
+                characterLoader.postValue(false)
+            }
+
+            override fun onError(e: Throwable) {
+                characterError.postValue(e.message)
+                characterLoader.postValue(false)
+            }
+        }
+
+        this.characterRepository.getCharacterList()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnTerminate {
+                this.characterLoader.postValue(false)
+            }
+            .debounce(1000, TimeUnit.MILLISECONDS)
+            .subscribe(this.disposableObserver)
+    }
+
+
+    fun loadCharacters(sagaId: String?) {
         this.disposableObserver = object : DisposableObserver<List<Character>>() {
             override fun onComplete() {
                 characterLoader.postValue(false)

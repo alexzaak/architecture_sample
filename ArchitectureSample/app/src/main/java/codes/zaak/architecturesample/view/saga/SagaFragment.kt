@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import codes.zaak.architecturesample.R
+import codes.zaak.architecturesample.view.character.CharacterActivity
 import codes.zaak.architecturesample.viewmodel.AppViewModelFactory
 import codes.zaak.architecturesample.viewmodel.SagaViewModel
 import dagger.android.support.AndroidSupportInjection
@@ -86,7 +87,11 @@ class SagaFragment : Fragment() {
 
         refresh.setOnRefreshListener { this.viewModel.loadSagaList() }
 
-        this.adapter.itemSelected().subscribe { it -> this.makeToast(it.name) }
+        this.adapter.itemSelected().subscribe { it -> this.addFragment(it.id.toString()) }
+    }
+
+    private fun addFragment(sagaId: String) {
+        startActivity(CharacterActivity.newIntent(this.requireContext(), sagaId))
     }
 
     private fun makeToast(message: String) {
