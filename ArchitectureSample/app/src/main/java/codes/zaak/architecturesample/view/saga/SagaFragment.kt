@@ -87,10 +87,10 @@ class SagaFragment : Fragment() {
 
         refresh.setOnRefreshListener { this.viewModel.loadSagaList() }
 
-        this.adapter.itemSelected().subscribe { it -> this.addFragment(it.id.toString()) }
+        this.adapter.itemSelected().subscribe { it -> this.addFragment(it.id) }
     }
 
-    private fun addFragment(sagaId: String) {
+    private fun addFragment(sagaId: Int) {
         startActivity(CharacterActivity.newIntent(this.requireContext(), sagaId))
     }
 

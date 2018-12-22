@@ -12,12 +12,14 @@ data class Character(
     @Json(name = "fighting_power")
     val power: String,
     val race: String,
-    val saga: String
+    val saga: String,
+    @Json(name = "saga_id")
+    val sagaId: Int
 ) {
 
     companion object {
         fun create(entity: CharacterEntity): Character {
-            return Character(entity.id, entity.name, entity.image, entity.power, entity.race, entity.saga)
+            return Character(entity.id, entity.name, entity.image, entity.power, entity.race, entity.saga, entity.sagaId)
         }
     }
 }

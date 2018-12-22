@@ -8,7 +8,10 @@ import io.reactivex.Single
 @Dao
 interface CharacterDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertCharacter(characters: List<CharacterEntity>)
+    fun insertCharacterList(characters: List<CharacterEntity>)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertCharacter(character: CharacterEntity)
 
     @Update
     fun updateCharacter(character: CharacterEntity)
@@ -18,4 +21,7 @@ interface CharacterDao {
 
     @Query("SELECT * FROM CHARACTER")
     fun getCharacterList(): Flowable<List<CharacterEntity>>
+
+    @Query("SELECT * FROM CHARACTER WHERE saga_id = :saga_id_")
+    fun getCharacterList(saga_id_: Int): Flowable<List<CharacterEntity>>
 }

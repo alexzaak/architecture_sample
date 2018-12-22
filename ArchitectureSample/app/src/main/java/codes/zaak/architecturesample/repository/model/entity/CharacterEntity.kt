@@ -18,5 +18,7 @@ data class CharacterEntity(
     @ColumnInfo(name = "race")
     val race: String,
     @ColumnInfo(name = "saga")
-    val saga: String
+    val saga: String,
+    @ColumnInfo(name = "saga_id")
+    val sagaId: Int
 )

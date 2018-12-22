@@ -15,19 +15,18 @@ class CharacterActivity : BaseActivity() {
         setContentView(R.layout.activity_character)
 
         if (savedInstanceState == null) {
-            val sagaId = intent.getStringExtra(EXTRA_SAGA_ID)
-                ?: throw IllegalStateException("field $EXTRA_SAGA_ID missing in Intent")
+            val sagaId = intent.getIntExtra(EXTRA_SAGA_ID, 0)
 
             val characterFragment = CharacterFragment.create(sagaId)
             supportFragmentManager.beginTransaction().replace(R.id.container, characterFragment)
-                .addToBackStack(null).commit()
+                .addToBackStack(CharacterFragment.TAG_CHARACTER_FRAGMENT).commit()
         }
     }
 
     companion object {
         const val EXTRA_SAGA_ID: String = "saga_id"
 
-        fun newIntent(context: Context, sagaId: String): Intent {
+        fun newIntent(context: Context, sagaId: Int): Intent {
            return Intent(context, CharacterActivity::class.java).apply {
                 putExtra(EXTRA_SAGA_ID, sagaId)
 

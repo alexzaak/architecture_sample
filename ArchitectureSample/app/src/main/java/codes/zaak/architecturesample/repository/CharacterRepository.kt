@@ -14,29 +14,29 @@ import javax.inject.Singleton
 @Singleton
 class CharacterRepository @Inject constructor(private val service: CharacterService, private val dao: CharacterDao) {
 
-    fun getCharacterList(): Observable<List<Character>> {
-        val remoteData = this.getRemoteData()
-        val localData = this.getLocalData()
+    fun getCharacterList(sagaId: Int): Observable<List<Character>> {
+        val remoteData = this.getRemoteData(sagaId)
+        val localData = this.getLocalData(sagaId)
 
         return Observable.concatArrayDelayError(remoteData.toObservable(), localData.toObservable())
     }
 
-    private fun getRemoteData(): Flowable<List<Character>> {
-        return this.service.getAllCharacters()
+    private fun getRemoteData(sagaId: Int): Flowable<List<Character>> {
+        return this.service.getCharacters(sagaId)
             .subscribeOn(Schedulers.io())
             .doOnNext {
                 Timber.d("Fetched Characters ${it.size}")
-                this.dao.insertCharacter(it.map { character ->
+                this.dao.insertCharacterList(it.map { character ->
                     CharacterEntity(
                         character.id,
-                        character.name, character.image, character.power, character.race, character.saga
+                        character.name, character.image, character.power, character.race, character.saga, character.sagaId
                     )
                 })
             }
     }
 
-    private fun getLocalData(): Flowable<List<Character>> {
-        return this.dao.getCharacterList()
+    private fun getLocalData(sagaId: Int): Flowable<List<Character>> {
+        return this.dao.getCharacterList(sagaId)
             .subscribeOn(Schedulers.computation())
             .map { it.map { entity -> Character.create(entity) } }
             .doOnNext {

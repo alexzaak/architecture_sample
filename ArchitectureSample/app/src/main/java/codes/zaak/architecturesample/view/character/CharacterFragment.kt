@@ -28,7 +28,8 @@ class CharacterFragment : Fragment() {
     lateinit var viewModelFactory: AppViewModelFactory
     private lateinit var viewModel: CharacterViewModel
 
-    var adapter = CharacterAdapter(ArrayList())
+    private var adapter = CharacterAdapter(ArrayList())
+    private var sagaId: Int = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,10 +48,10 @@ class CharacterFragment : Fragment() {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
 
-        val sagaId = arguments?.getString(ARG_SAGA_ID)
+        this.sagaId = arguments?.getInt(ARG_SAGA_ID, 0)!!
 
         this.viewModel = ViewModelProviders.of(this, viewModelFactory).get(CharacterViewModel::class.java)
-        this.viewModel.loadCharacters(sagaId)
+        this.viewModel.loadCharacters(this.sagaId)
     }
 
     override fun onDetach() {
@@ -88,19 +89,18 @@ class CharacterFragment : Fragment() {
             itemAnimator = DefaultItemAnimator()
         }
 
-        refresh.setOnRefreshListener { this.viewModel.loadCharacters() }
+        refresh.setOnRefreshListener { this.viewModel.loadCharacters(this.sagaId) }
 
     }
 
     companion object {
-
         const val TAG_CHARACTER_FRAGMENT: String = "character_fragment"
         private const val ARG_SAGA_ID: String = "saga_id"
 
-        fun create(sagaId: String): CharacterFragment {
+        fun create(sagaId: Int): CharacterFragment {
             val fragment = CharacterFragment()
             val args: Bundle = Bundle()
-            args.putString(ARG_SAGA_ID, sagaId)
+            args.putInt(ARG_SAGA_ID, sagaId)
             fragment.arguments = args
             return fragment
         }

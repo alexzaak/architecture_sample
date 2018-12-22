@@ -35,7 +35,8 @@ class CharacterViewModel @Inject constructor(private val characterRepository: Ch
         return this.characterLoader
     }
 
-    fun loadCharacters() {
+
+    fun loadCharacters(sagaId: Int?) {
         this.disposableObserver = object : DisposableObserver<List<Character>>() {
             override fun onComplete() {
                 characterLoader.postValue(false)
@@ -56,45 +57,13 @@ class CharacterViewModel @Inject constructor(private val characterRepository: Ch
             }
         }
 
-        this.characterRepository.getCharacterList()
+        this.characterRepository.getCharacterList(sagaId!!)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnTerminate {
                 this.characterLoader.postValue(false)
             }
-            .debounce(1000, TimeUnit.MILLISECONDS)
-            .subscribe(this.disposableObserver)
-    }
-
-
-    fun loadCharacters(sagaId: String?) {
-        this.disposableObserver = object : DisposableObserver<List<Character>>() {
-            override fun onComplete() {
-                characterLoader.postValue(false)
-            }
-
-            override fun onStart() {
-                characterLoader.postValue(true)
-            }
-
-            override fun onNext(chracterList: List<Character>) {
-                characterResult.postValue(chracterList)
-                characterLoader.postValue(false)
-            }
-
-            override fun onError(e: Throwable) {
-                characterError.postValue(e.message)
-                characterLoader.postValue(false)
-            }
-        }
-
-        this.characterRepository.getCharacterList()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .doOnTerminate {
-                this.characterLoader.postValue(false)
-            }
-            .debounce(1000, TimeUnit.MILLISECONDS)
+            .debounce(200, TimeUnit.MILLISECONDS)
             .subscribe(this.disposableObserver)
     }
 
