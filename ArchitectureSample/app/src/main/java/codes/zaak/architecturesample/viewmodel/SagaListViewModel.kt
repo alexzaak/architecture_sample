@@ -12,18 +12,18 @@ import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-class SagaViewModel @Inject constructor(private val sagaRepository: SagaRepository): ViewModel() {
+class SagaListViewModel @Inject constructor(private val sagaRepository: SagaRepository) : ViewModel() {
 
     init {
         Timber.d("SagaListViewModel injected")
     }
 
-    private var result: MediatorLiveData<Saga> = MediatorLiveData()
+    private var result: MediatorLiveData<List<Saga>> = MediatorLiveData()
     private var error: MediatorLiveData<String> = MediatorLiveData()
     private var loader: MediatorLiveData<Boolean> = MediatorLiveData()
-    lateinit var disposableObserver: DisposableObserver<Saga>
+    lateinit var disposableObserver: DisposableObserver<List<Saga>>
 
-    fun result(): LiveData<Saga> {
+    fun result(): LiveData<List<Saga>> {
         return this.result
     }
 
@@ -35,8 +35,8 @@ class SagaViewModel @Inject constructor(private val sagaRepository: SagaReposito
         return this.loader
     }
 
-    fun loadSaga(sagaId: Int) {
-        this.disposableObserver = object : DisposableObserver<Saga>() {
+    fun loadSagaList() {
+        this.disposableObserver = object : DisposableObserver<List<Saga>>() {
             override fun onComplete() {
                 loader.postValue(false)
             }
@@ -45,8 +45,8 @@ class SagaViewModel @Inject constructor(private val sagaRepository: SagaReposito
                 loader.postValue(true)
             }
 
-            override fun onNext(saga: Saga) {
-                result.postValue(saga)
+            override fun onNext(sagaList: List<Saga>) {
+                result.postValue(sagaList)
                 loader.postValue(false)
             }
 
@@ -56,7 +56,7 @@ class SagaViewModel @Inject constructor(private val sagaRepository: SagaReposito
             }
         }
 
-        this.sagaRepository.getSaga(sagaId)
+        this.sagaRepository.getSagaList()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnTerminate {

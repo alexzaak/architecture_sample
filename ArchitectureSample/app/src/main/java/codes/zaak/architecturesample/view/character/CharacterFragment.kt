@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -14,10 +15,13 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import codes.zaak.architecturesample.R
+import codes.zaak.architecturesample.repository.model.response.Saga
 import codes.zaak.architecturesample.viewmodel.AppViewModelFactory
 import codes.zaak.architecturesample.viewmodel.CharacterViewModel
+import codes.zaak.architecturesample.viewmodel.SagaViewModel
+import com.squareup.picasso.Picasso
 import dagger.android.support.AndroidSupportInjection
-import kotlinx.android.synthetic.main.fragment_saga.*
+import kotlinx.android.synthetic.main.fragment_character.*
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -26,7 +30,8 @@ class CharacterFragment : Fragment() {
 
     @Inject
     lateinit var viewModelFactory: AppViewModelFactory
-    private lateinit var viewModel: CharacterViewModel
+    private lateinit var characterViewModel: CharacterViewModel
+    private lateinit var sagaViewModel: SagaViewModel
 
     private var adapter = CharacterAdapter(ArrayList())
     private var sagaId: Int = 0
@@ -50,17 +55,19 @@ class CharacterFragment : Fragment() {
 
         this.sagaId = arguments?.getInt(ARG_SAGA_ID, 0)!!
 
-        this.viewModel = ViewModelProviders.of(this, viewModelFactory).get(CharacterViewModel::class.java)
-        this.viewModel.loadCharacters(this.sagaId)
+        this.characterViewModel = ViewModelProviders.of(this, viewModelFactory).get(CharacterViewModel::class.java)
+        this.sagaViewModel = ViewModelProviders.of(this, viewModelFactory).get(SagaViewModel::class.java)
+        this.characterViewModel.loadCharacters(this.sagaId)
+        this.sagaViewModel.loadSaga(this.sagaId)
     }
 
     override fun onDetach() {
         super.onDetach()
-        this.viewModel.disposeElements()
+        this.characterViewModel.disposeElements()
     }
 
     private fun initObserver() {
-        this.viewModel.result().observe(this, Observer {
+        this.characterViewModel.result().observe(this, Observer {
             Timber.d(it.toString())
             it.let { result ->
                 adapter.addCharacterList(result)
@@ -68,16 +75,30 @@ class CharacterFragment : Fragment() {
             }
         })
 
-        this.viewModel.error().observe(this, Observer {
+        this.characterViewModel.error().observe(this, Observer {
             Toast.makeText(this.context, it, Toast.LENGTH_LONG).show()
         })
 
-        this.viewModel.loader().observe(this, Observer {
+        this.characterViewModel.loader().observe(this, Observer {
             it.let { isLoading ->
                 refresh.isRefreshing = isLoading
                 Toast.makeText(this.context, isLoading.toString(), Toast.LENGTH_LONG).show()
             }
         })
+
+        this.sagaViewModel.result().observe(this, Observer {
+            it.let { saga ->
+                Picasso.get().load(saga.image).into(header_image)
+                this.setupToolBar(saga)
+            }
+        })
+    }
+
+    private fun setupToolBar(saga: Saga) {
+        (this.activity as AppCompatActivity).apply {
+            setSupportActionBar(main_toolbar)
+            supportActionBar?.title = saga.name
+        }
     }
 
     private fun initUi() {
@@ -89,8 +110,7 @@ class CharacterFragment : Fragment() {
             itemAnimator = DefaultItemAnimator()
         }
 
-        refresh.setOnRefreshListener { this.viewModel.loadCharacters(this.sagaId) }
-
+        refresh.setOnRefreshListener { this.characterViewModel.loadCharacters(this.sagaId) }
     }
 
     companion object {

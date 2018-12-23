@@ -2,6 +2,7 @@ package codes.zaak.architecturesample.di
 
 import androidx.lifecycle.ViewModel
 import codes.zaak.architecturesample.viewmodel.CharacterViewModel
+import codes.zaak.architecturesample.viewmodel.SagaListViewModel
 import codes.zaak.architecturesample.viewmodel.SagaViewModel
 import dagger.Binds
 import dagger.Module
@@ -13,6 +14,11 @@ internal abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(CharacterViewModel::class)
     internal abstract fun bindMainViewModels(characterViewModel: CharacterViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(SagaListViewModel::class)
+    internal abstract fun bindSagaListViewModels(sagaListViewModel: SagaListViewModel): ViewModel
 
     @Binds
     @IntoMap

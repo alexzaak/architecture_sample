@@ -19,7 +19,8 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".view.character.CharacterActivity">
+        <activity android:name=".view.character.CharacterActivity"
+                  android:theme="@style/AppThemeNoActionBar">
         </activity>
     </application>
 

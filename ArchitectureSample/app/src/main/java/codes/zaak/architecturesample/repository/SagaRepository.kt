@@ -6,6 +6,7 @@ import codes.zaak.architecturesample.repository.model.entity.SagaEntity
 import codes.zaak.architecturesample.repository.model.response.Saga
 import io.reactivex.Flowable
 import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import javax.inject.Inject
@@ -13,6 +14,10 @@ import javax.inject.Singleton
 
 @Singleton
 class SagaRepository @Inject constructor(private val service: SagaService, private val sagaDao: SagaDao) {
+
+    fun getSaga(id: Int): Observable<Saga> {
+        return this.service.getSaga(id).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).toObservable()
+    }
 
     fun getSagaList(): Observable<List<Saga>> {
         val remoteData = this.getRemoteData()
