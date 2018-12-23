@@ -27,7 +27,7 @@ class SagaFragment : Fragment() {
     lateinit var viewModelFactory: AppViewModelFactory
     private lateinit var listViewModel: SagaListViewModel
 
-    var adapter = SagaAdapter(ArrayList())
+    var adapter = SagaAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

@@ -33,7 +33,7 @@ class CharacterFragment : Fragment() {
     private lateinit var characterViewModel: CharacterViewModel
     private lateinit var sagaViewModel: SagaViewModel
 
-    private var adapter = CharacterAdapter(ArrayList())
+    private var adapter = CharacterAdapter()
     private var sagaId: Int = 0
 
     override fun onCreateView(

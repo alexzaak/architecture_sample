@@ -9,18 +9,18 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import codes.zaak.architecturesample.R
 import codes.zaak.architecturesample.repository.model.response.Saga
+import codes.zaak.architecturesample.view.SmartItemUpdate
 import com.squareup.picasso.Picasso
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.subjects.PublishSubject
+import kotlin.properties.Delegates
 
-class SagaAdapter(sagaList: List<Saga>) : RecyclerView.Adapter<SagaAdapter.SagaViewHolder>() {
+class SagaAdapter : RecyclerView.Adapter<SagaAdapter.SagaViewHolder>(), SmartItemUpdate {
 
     private val subject: PublishSubject<Saga> = PublishSubject.create()
-    private var sagaList = ArrayList<Saga>()
-
-    init {
-        this.sagaList = sagaList as ArrayList<Saga>
+    private var sagaList: List<Saga> by Delegates.observable(emptyList()) { _, old, new ->
+        smartUpdate(old, new) { o, n -> o.id != n.id }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SagaViewHolder {
@@ -46,10 +46,7 @@ class SagaAdapter(sagaList: List<Saga>) : RecyclerView.Adapter<SagaAdapter.SagaV
     }
 
     fun addSagaList(sagaList: List<Saga>) {
-        val initPosition = this.sagaList.size
-        this.sagaList.clear()
-        this.sagaList.addAll(sagaList)
-        notifyItemRangeInserted(initPosition, this.sagaList.size)
+        this.sagaList = sagaList
     }
 
     class SagaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

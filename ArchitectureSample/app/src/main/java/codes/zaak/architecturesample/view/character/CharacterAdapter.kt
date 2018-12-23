@@ -9,14 +9,15 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import codes.zaak.architecturesample.R
 import codes.zaak.architecturesample.repository.model.response.Character
+import codes.zaak.architecturesample.view.SmartItemUpdate
 import com.squareup.picasso.Picasso
+import kotlin.properties.Delegates
 
-class CharacterAdapter(characterList: List<Character>?) : RecyclerView.Adapter<CharacterAdapter.CharacterViewHolder>() {
+class CharacterAdapter : RecyclerView.Adapter<CharacterAdapter.CharacterViewHolder>(),
+    SmartItemUpdate {
 
-    private var characterList = ArrayList<Character>()
-
-    init {
-        this.characterList = characterList as ArrayList<Character>
+    private var characterList: List<Character> by Delegates.observable(emptyList()) { _, old, new ->
+        smartUpdate(old, new) { o, n -> o.id == n.id }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharacterViewHolder {
@@ -36,10 +37,8 @@ class CharacterAdapter(characterList: List<Character>?) : RecyclerView.Adapter<C
         return characterList.size
     }
 
-    fun addCharacterList(characters: List<Character>) {
-        val initPosition = characterList.size
-        characterList.addAll(characters)
-        notifyItemRangeInserted(initPosition, characterList.size)
+    fun addCharacterList(characterList: List<Character>) {
+        this.characterList = characterList
     }
 
     class CharacterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
