@@ -3,4 +3,9 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="why">Why this project?</string>
+    <string name="saga">Saga overview</string>
+    <string name="add_character">Add a new character</string>
+    <string name="more">More</string>
+    <string name="show_on_github">Show on GitHub</string>
 </resources>

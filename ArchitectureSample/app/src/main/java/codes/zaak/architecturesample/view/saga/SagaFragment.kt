@@ -42,7 +42,7 @@ class SagaFragment : Fragment() {
         this.initUi()
     }
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
 
