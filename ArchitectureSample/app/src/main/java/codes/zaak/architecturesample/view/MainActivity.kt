@@ -8,8 +8,11 @@ import androidx.appcompat.app.ActionBar
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import codes.zaak.architecturesample.R
 import codes.zaak.architecturesample.view.saga.SagaFragment
+import codes.zaak.architecturesample.view.webview.WebviewFragment
 import com.google.android.material.navigation.NavigationView
 import dagger.android.AndroidInjection
 
@@ -42,11 +45,11 @@ class MainActivity : BaseActivity() {
 
             // Add code here to update the UI based on the item selected
             // For example, swap UI fragments here
-            when(menuItem.itemId) {
+            when (menuItem.itemId) {
                 R.id.nav_why -> this.makeToast(menuItem.title.toString())
-                R.id.nav_saga -> this.makeToast(menuItem.title.toString())
+                R.id.nav_saga -> addFragment(SagaFragment(), SagaFragment.TAG)
                 R.id.nav_add_character -> this.makeToast(menuItem.title.toString())
-                R.id.nav_more -> this.makeToast(menuItem.title.toString())
+                R.id.nav_more -> this.addFragment(WebviewFragment(), WebviewFragment.TAG)
             }
             true
         }
@@ -72,9 +75,7 @@ class MainActivity : BaseActivity() {
         )
 
         if (savedInstanceState == null) {
-            val sagaFragment = SagaFragment()
-            supportFragmentManager.beginTransaction().replace(R.id.container, sagaFragment)
-                .addToBackStack(null).commit()
+            addFragment(SagaFragment(), SagaFragment.TAG)
         }
     }
 
@@ -86,6 +87,19 @@ class MainActivity : BaseActivity() {
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun addFragment(fragment: Fragment, tag: String) {
+        var fragmentTemp = supportFragmentManager.findFragmentByTag(tag)
+
+        if (fragmentTemp == null) {
+            fragmentTemp = fragment
+        }
+
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.container, fragmentTemp, tag)
+            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+            .commit()
     }
 
     private fun makeToast(msg: String) {

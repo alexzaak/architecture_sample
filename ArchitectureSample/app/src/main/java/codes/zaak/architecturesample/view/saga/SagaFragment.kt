@@ -97,4 +97,8 @@ class SagaFragment : Fragment() {
     private fun makeToast(message: String) {
         Toast.makeText(this.context, message, Toast.LENGTH_LONG).show()
     }
+
+    companion object {
+         const val TAG: String = "saga_fragment"
+    }
 }
