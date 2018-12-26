@@ -1,0 +1,1 @@
+Android Architecture Sample mit MVVM, Dagger (Dependency Injection), Retrofit, Room, RxJava

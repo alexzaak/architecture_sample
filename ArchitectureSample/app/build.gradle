@@ -1,24 +1,52 @@
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
-apply plugin: 'kotlin-kapt'
+plugins {
+    id 'com.android.application'
+    id 'com.github.triplet.play'
+    id 'kotlin-android'
+    id 'kotlin-android-extensions'
+    id 'kotlin-kapt'
+}
+
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion project.compileSdkVersion
+    buildToolsVersion project.buildToolsVersion
+
     defaultConfig {
         applicationId "codes.zaak.architecturesample"
-        minSdkVersion 23
-        targetSdkVersion 28
-        versionCode 1
-        versionName "1.0"
+
+        minSdkVersion project.minSdkVersion
+        targetSdkVersion project.targetSdkVersion
+
+        versionCode rootProject.ext.versionCode()
+        versionName rootProject.ext.versionName()
+
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    signingConfigs {
+        release {
+            // You need to specify either an absolute path or include the
+            // keystore file in the same directory as the build.gradle file.
+
+            Properties localProps = new Properties()
+            localProps.load(new FileInputStream(file('../local.properties')))
+
+            storeFile file(localProps["RELEASE_STORE_FILE"])
+            keyAlias localProps["RELEASE_KEY_ALIAS"]
+            storePassword localProps["RELEASE_STORE_PASSWORD"]
+            keyPassword localProps["RELEASE_KEY_PASSWORD"]
+        }
     }
     buildTypes {
         release {
+            signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+}
+
+play {
+    serviceAccountCredentials = file("keys.json")
 }
 
 dependencies {
