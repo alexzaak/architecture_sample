@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
 
-cd architecture_sample/
-chmod a+x ./ArchitectureSample/gradlew
+chmod a+x ./gradlew
 ./gradlew publish
